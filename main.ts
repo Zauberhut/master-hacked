@@ -13,36 +13,37 @@ radio.onReceivedNumber(function (receivedNumber) {
 })
 input.onButtonPressed(Button.A, function () {
     pins.digitalWritePin(DigitalPin.P1, 1)
+    pins.digitalWritePin(DigitalPin.P2, 1)
     radio.sendNumber(1)
-    blinken()
-    basic.showIcon(IconNames.Yes)
-    music.playMelody("B G B G B G B G ", 120)
-    basic.pause(1000)
-    basic.clearScreen()
-    basic.pause(10000)
-    pins.digitalWritePin(DigitalPin.P1, 0)
+    basic.showLeds(`
+        . . . . .
+        . . . . .
+        . . # . .
+        . . . . .
+        . . . . .
+        `)
 })
 radio.onReceivedString(function (receivedString) {
     pins.digitalWritePin(DigitalPin.P2, 0)
+    pins.digitalWritePin(DigitalPin.P1, 0)
     basic.showIcon(IconNames.No)
     basic.pause(1000)
     basic.clearScreen()
-    pins.digitalWritePin(DigitalPin.P1, 0)
 })
 input.onButtonPressed(Button.B, function () {
     pins.digitalWritePin(DigitalPin.P2, 0)
+    pins.digitalWritePin(DigitalPin.P1, 0)
     radio.sendString("stop")
     basic.showIcon(IconNames.No)
-    basic.pause(1000)
+    basic.pause(100)
     basic.clearScreen()
-    pins.digitalWritePin(DigitalPin.P1, 0)
 })
 function blinken () {
     for (let index = 0; index < 10; index++) {
         pins.digitalWritePin(DigitalPin.P2, 1)
-        basic.pause(200)
+        music.playTone(494, music.beat(BeatFraction.Quarter))
         pins.digitalWritePin(DigitalPin.P2, 0)
-        basic.pause(200)
+        music.playTone(392, music.beat(BeatFraction.Quarter))
     }
     pins.digitalWritePin(DigitalPin.P2, 1)
 }
