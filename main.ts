@@ -1,50 +1,53 @@
 radio.onReceivedNumber(function (receivedNumber) {
-    pins.digitalWritePin(DigitalPin.P1, 1)
-    pins.digitalWritePin(DigitalPin.P2, 1)
-    music.playMelody("B G B G B G B G ", 120)
-    basic.showLeds(`
-        . . . . .
-        . . . . .
-        . . # . .
-        . . . . .
-        . . . . .
-        `)
-    blinken()
+	
 })
 input.onButtonPressed(Button.A, function () {
+    radio.sendString("stop")
     pins.digitalWritePin(DigitalPin.P1, 1)
     pins.digitalWritePin(DigitalPin.P2, 1)
-    radio.sendNumber(1)
+    blinken()
     basic.showLeds(`
-        . . . . .
-        . . . . .
-        . . # . .
-        . . . . .
+        . . . . #
+        . . . # .
+        # . # . .
+        . # . . .
         . . . . .
         `)
+    basic.pause(10000)
+    pins.digitalWritePin(DigitalPin.P1, 0)
 })
 radio.onReceivedString(function (receivedString) {
-    pins.digitalWritePin(DigitalPin.P2, 0)
-    pins.digitalWritePin(DigitalPin.P1, 0)
-    basic.showIcon(IconNames.No)
-    basic.pause(1000)
-    basic.clearScreen()
+    if (receivedString == "Darkweb") {
+        pins.digitalWritePin(DigitalPin.P1, 1)
+        pins.digitalWritePin(DigitalPin.P2, 1)
+        blinken()
+        basic.showLeds(`
+            . . . . #
+            . . . # .
+            # . # . .
+            . # . . .
+            . . . . .
+            `)
+        basic.pause(10000)
+        pins.digitalWritePin(DigitalPin.P1, 0)
+    }
+    if (receivedString == "stop") {
+        pins.digitalWritePin(DigitalPin.P2, 0)
+        pins.digitalWritePin(DigitalPin.P1, 0)
+    }
 })
 input.onButtonPressed(Button.B, function () {
+    radio.sendString("Darkweb")
     pins.digitalWritePin(DigitalPin.P2, 0)
     pins.digitalWritePin(DigitalPin.P1, 0)
-    radio.sendString("stop")
-    basic.showIcon(IconNames.No)
-    basic.pause(100)
-    basic.clearScreen()
 })
 function blinken () {
-    for (let index = 0; index < 10; index++) {
+    for (let index = 0; index < 8; index++) {
         pins.digitalWritePin(DigitalPin.P2, 1)
-        music.playTone(494, music.beat(BeatFraction.Quarter))
+        music.playTone(494, music.beat(BeatFraction.Whole))
         pins.digitalWritePin(DigitalPin.P2, 0)
-        music.playTone(392, music.beat(BeatFraction.Quarter))
+        music.playTone(392, music.beat(BeatFraction.Whole))
     }
     pins.digitalWritePin(DigitalPin.P2, 1)
 }
-radio.setGroup(1)
+radio.setGroup(123)
